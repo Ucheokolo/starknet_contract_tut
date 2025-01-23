@@ -48,16 +48,15 @@ mod VotingSystem {
         }
 
         fn vote(ref self: ContractState, proposal_id: u32, vote: bool) {
-           let mut proposal = self.proposals.entry(proposal_id);
-           let caller = get_caller_address();
-           let has_voted = proposal.voters.entry(caller).read();
-           if has_voted {
-            return;
-           }
-           proposal.voters.entry(caller).write(true);
+            let mut proposal = self.proposals.entry(proposal_id);
+            let caller = get_caller_address();
+            let has_voted = proposal.voters.entry(caller).read();
+            if has_voted {
+                return;
+            }
+            proposal.voters.entry(caller).write(true);
 
-           self.voted.entry((caller, proposal_id)).write(true)
-           
+            self.voted.entry((caller, proposal_id)).write(true)
         }
     }
 }
