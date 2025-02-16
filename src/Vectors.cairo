@@ -10,22 +10,26 @@ trait IAddressList<TContractState> {
 
 #[starknet::contract]
 mod AddressList {
-    use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess, Vec, VecTrait, MutableVecTrait};
+    use starknet::storage::{
+        StoragePointerReadAccess, StoragePointerWriteAccess, Vec, VecTrait, MutableVecTrait,
+    };
     use core::starknet::{get_caller_address, ContractAddress};
 
     #[storage]
     struct Storage {
-       addresses : Vec<ContractAddress>,
+        addresses: Vec<ContractAddress>,
     }
 
     #[abi(embed_v0)]
-    impl AddressListImpl of super::IAddressList<ContractState>{
+    impl AddressListImpl of super::IAddressList<ContractState> {
         fn register_caller(ref self: ContractState) {
             let caller = get_caller_address();
             self.addresses.append().write(caller);
         }
 
-        fn get_n_th_registered_address(self: @ContractState, index: u64) -> Option<ContractAddress> {
+        fn get_n_th_registered_address(
+            self: @ContractState, index: u64,
+        ) -> Option<ContractAddress> {
             if let Option::Some(storage_ptr) = self.addresses.get(index) {
                 return Option::Some(storage_ptr.read());
             }

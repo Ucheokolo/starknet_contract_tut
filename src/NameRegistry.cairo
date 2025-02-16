@@ -4,13 +4,14 @@ use core::starknet::ContractAddress;
 pub trait INameRegistry<TContractState> {
     fn store_name(ref self: TContractState, name: felt252);
     fn get_name(self: @TContractState, address: ContractAddress) -> felt252;
-    
 }
 
 #[starknet::contract]
 mod NameRegistry {
     use core::starknet::{ContractAddress, get_caller_address};
-    use core::starknet::storage::{Map, StoragePathEntry, StoragePointerReadAccess, StoragePointerWriteAccess};
+    use core::starknet::storage::{
+        Map, StoragePathEntry, StoragePointerReadAccess, StoragePointerWriteAccess,
+    };
 
     #[storage]
     struct Storage {
@@ -31,7 +32,7 @@ mod NameRegistry {
     }
 
     #[abi(embed_v0)]
-    impl NameRegistry of super::INameRegistry<ContractState>{
+    impl NameRegistry of super::INameRegistry<ContractState> {
         fn store_name(ref self: ContractState, name: felt252) {
             let caller = get_caller_address();
             self._store_name(caller, name);
@@ -41,9 +42,9 @@ mod NameRegistry {
             self.names.entry(address).read()
         }
     }
-    
+
     #[external(v0)]
-    fn get_contract_name(ref self: ContractState, ) -> felt252{
+    fn get_contract_name(ref self: ContractState) -> felt252 {
         'Name Registry'
     }
 
@@ -53,8 +54,7 @@ mod NameRegistry {
             let total_names = self.total_names.read();
             self.names.entry(user).write(name);
             self.total_names.write(total_names + 1);
-            self.emit(NAmeRegistered { serial_id: total_names, address: user, name})
-
+            self.emit(NAmeRegistered { serial_id: total_names, address: user, name })
         }
     }
 
@@ -68,18 +68,17 @@ mod NameRegistry {
         NAmeRegistered: NAmeRegistered,
         NameRetreived: NameRetreived,
     }
-    
+
     #[derive(Drop, starknet::Event)]
-    pub struct NAmeRegistered{
+    pub struct NAmeRegistered {
         serial_id: u128,
         address: ContractAddress,
         name: felt252,
     }
-    
+
     #[derive(Drop, starknet::Event)]
     pub struct NameRetreived {
         address: ContractAddress,
         name: felt252,
     }
-
 }
