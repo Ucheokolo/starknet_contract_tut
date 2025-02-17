@@ -34,7 +34,7 @@ mod TokenWrapper {
             recipient: ContractAddress,
             amount: u256,
         ) -> bool {
-            let erc20_dispatcher = IERC20Dispatcher { contract_address: address };
+            let mut erc20_dispatcher = IERC20Dispatcher { contract_address: address };
             erc20_dispatcher.transfer_from(get_caller_address(), recipient, amount)
         }
     }

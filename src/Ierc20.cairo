@@ -2,9 +2,9 @@ use core::starknet::ContractAddress;
 
 pub trait IERC20DispatcherTrait<T> {
     fn name(self: T) -> felt252;
-    fn transfer(self: T, recipient: ContractAddress, amount: u256);
+    fn transfer(ref self: T, recipient: ContractAddress, amount: u256);
     fn transfer_from(
-        self: T, sender: ContractAddress, recipient: ContractAddress, amount: u256,
+        ref self: T, sender: ContractAddress, recipient: ContractAddress, amount: u256,
     ) -> bool;
 }
 
@@ -38,7 +38,7 @@ impl IERC20DispatcherImpl of IERC20DispatcherTrait<IERC20Dispatcher> {
         )
     }
 
-    fn transfer(self: IERC20Dispatcher, recipient: ContractAddress, amount: u256) {
+    fn transfer(ref self: IERC20Dispatcher, recipient: ContractAddress, amount: u256) {
         // prepare calldata
         let mut __calldata__ = core::traits::Default::default();
         core::serde::Serde::<ContractAddress>::serialize(@recipient, ref __calldata__);
@@ -59,7 +59,7 @@ impl IERC20DispatcherImpl of IERC20DispatcherTrait<IERC20Dispatcher> {
     }
 
     fn transfer_from(
-        self: IERC20Dispatcher, sender: ContractAddress, recipient: ContractAddress, amount: u256,
+        ref self: IERC20Dispatcher, sender: ContractAddress, recipient: ContractAddress, amount: u256,
     ) -> bool {
         let mut __call_data__ = core::traits::Default::default();
         core::serde::Serde::<ContractAddress>::serialize(@sender, ref __call_data__);
