@@ -5,4 +5,4 @@ mod NameRegistry;
 mod Ierc20;
 mod TokenWrapper;
 mod Library;
-mod ValueStorageLogic;
+mod ValueStoreLogic;

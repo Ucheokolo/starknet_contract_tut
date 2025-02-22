@@ -59,7 +59,10 @@ impl IERC20DispatcherImpl of IERC20DispatcherTrait<IERC20Dispatcher> {
     }
 
     fn transfer_from(
-        ref self: IERC20Dispatcher, sender: ContractAddress, recipient: ContractAddress, amount: u256,
+        ref self: IERC20Dispatcher,
+        sender: ContractAddress,
+        recipient: ContractAddress,
+        amount: u256,
     ) -> bool {
         let mut __call_data__ = core::traits::Default::default();
         core::serde::Serde::<ContractAddress>::serialize(@sender, ref __call_data__);
@@ -72,11 +75,11 @@ impl IERC20DispatcherImpl of IERC20DispatcherTrait<IERC20Dispatcher> {
             core::array::ArrayTrait::span(@__call_data__),
         );
 
-        let mut __dispatcher_return_data__ = starknet::SyscallResultTrait::unwrap_syscall(__dispatcher_return_data__);
+        let mut __dispatcher_return_data__ = starknet::SyscallResultTrait::unwrap_syscall(
+            __dispatcher_return_data__,
+        );
 
         // this line of code enables the return of boolean type...
         Serde::<bool>::deserialize(ref __dispatcher_return_data__).unwrap()
-
-
     }
 }
